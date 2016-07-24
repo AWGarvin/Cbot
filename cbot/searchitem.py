@@ -3,12 +3,13 @@ from lxml import html
 import requests
 import sys
 craigUrl = "craigslist.org"
+http = "http:"
 
 class craigList:
     def __init__(self, sRegion, sCatagory, sKeyword, sMinDate):
         self.pageLinks = []
         self.cList = []
-        self.sCit = "http://" + sRegion + "."
+        self.sCit = http + "//" + sRegion + "."
         self.sCat = sCatagory
         self.sKey = "?query=" + sKeyword
         self.MinD = sMinDate
@@ -40,15 +41,18 @@ class craigList:
         control = 0
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
-                correctUrl = self.sCit + craigUrl + searchitem
+                if craigUrl in searchitem:
+                    correctUrl = http + searchitem
+                    break
+                else:
+                    correctUrl = self.sCit + craigUrl + searchitem
                 cItem = craigItem(correctUrl, self.sCit, self.MinD)
-                print cItem.getDate()
                 if 's' in cItem.getDate() or 'N' in cItem.getDate():
                     control += 1
                     continue
                 self.cList.append(cItem)
                 if control == 10:
-                   break
+                  break
                 control += 1
             break
 
@@ -149,8 +153,13 @@ class craigItem:
             Y = int(self.date[0][:4])
             M = int(self.date[0][5:7])
             D = int(self.date[0][8:])
-            dateval = lambda y, m, d: y*365+ m*30 + d
-            if dateval(Y, M, D) > dateval(self.minY, self.minM, self.minD):
+            if Y == self.minY:
+                if M < self.minM:
+                    self.date[0] = ['stop']
+                if M == self.minM:
+                    if D < self.minD:
+                        self.date[0] = ['stop']
+            elif Y < self.minY:
                 self.date[0] = ['stop']
         except:
             self.date = 'Not Available'
@@ -167,7 +176,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","chair", "2016-07-10")
+    c = craigList("tallahassee","antiques","chair", "2016-07-09")
     number = 1
     print "***********************************************"
     for it in c.cList:
