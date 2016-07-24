@@ -17,12 +17,16 @@ class craigList:
     def parseLinks(self):
         # print searchIndex.items()
         for k,v in searchIndex.items():
+            # print self.sCat
+            # print k
+            # print v
             if self.sCat in k:
                 pagewanted = v
+                # print "FOUND IT"
                 break
-            else:
-                sys.stderr.write ("page not found\n")
-                # return
+            # else:
+            #     sys.stderr.write ("page not found\n")
+            #     return
         pageNum = 0
         url = self.sCit + pagewanted + self.sKey
         while True:
@@ -41,10 +45,11 @@ class craigList:
         control = 0
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
-                print searchitem
+                #print searchitem
                 correctUrl = self.sCit + craigUrl + searchitem
+                if craigUrl in searchitem: break
                 cItem = craigItem(correctUrl, self.sCit, self.MinD)
-                print cItem.getDate()
+                #print cItem.getDate()
                 if 's' in cItem.getDate() or 'N' in cItem.getDate():
                     control += 1
                     continue
@@ -154,7 +159,7 @@ class craigItem:
             dateval = lambda y, m, d: y * 365 + m*30 + d
             if dateval(Y, M, D) < dateval(self.minY, self.minM, self.minD):
                 self.date[0] = ['stop']
-            print self.date[0]
+            # print self.date[0]
         except:
             self.date = 'Not Available'
         while '\n' in self.date: self.date.remove('\n')
@@ -171,10 +176,10 @@ class craigItem:
 
 if __name__ == "__main__":
     c = craigList("tallahassee","antiques","chair", "2016-07-10")
-    # number = 1
-    # print "***********************************************"
-    # for it in c.cList:
-    #     print number
-    #     print it
-    #     print "***********************************************"
-    #     number += 1
+    number = 1
+    print "***********************************************"
+    for it in c.cList:
+        print number
+        print it
+        print "***********************************************"
+        number += 1

@@ -1,6 +1,4 @@
-from collections import OrderedDict
-
-locations = {
+loc_dict = {
 'akron / canton': 'akroncanton',
 'albany, GA': 'albanyga',
 'albany, NY': 'albany',
@@ -413,5 +411,3 @@ locations = {
 'yuba-sutter, CA': 'yubasutter',
 'yuma, AZ': 'yuma',
 'zanesville / cambridge': 'zanesville'}
-
-loc_dict = OrderedDict(sorted(locations.items(), key=lambda t: t[0]))

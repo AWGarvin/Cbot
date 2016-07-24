@@ -1,6 +1,4 @@
-from collections import OrderedDict
-
-categories = {
+searchIndex = {
 "antiques": "craigslist.org/search/ata",
 "appliances": "craigslist.org/search/ppa",
 "arts+crafts": "craigslist.org/search/ara",
@@ -45,5 +43,3 @@ categories = {
 "trailers": "craigslist.org/search/tra",
 "video gaming": "craigslist.org/search/vga",
 "wanted": "craigslist.org/search/waa"}
-
-searchIndex = OrderedDict(sorted(categories.items(), key=lambda t: t[0]))

@@ -14,38 +14,47 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
         super(Cbot, self).__init__(parent)
         self.setupUi(self)
         self.regionCB.insertItem(0, 'tallahassee')
-        self.regionCB.insertItems(1, [l for l in loc_dict if l != 'tallahassee'])
+        self.regionCB.insertItems(1, [l for l in sorted(loc_dict)
+                                      if l != 'tallahassee'])
         self.categoryCB.insertItem(0, 'free')
-        self.categoryCB.insertItems(1, [c for c in searchIndex if c != 'free'])
+        self.categoryCB.insertItems(1, [c for c in sorted(searchIndex)
+                                        if c != 'free'])
         self.searchBTN.clicked.connect(self.search)
-        # self.viewBTN.clicked.connect()
+        self.viewBTN.clicked.connect(self.itemtest)
 
     def search(self):
         mindate = str(self.dateEdit.date().toPyDate())
-        region = str(self.regionCB.currentText())
-        category = loc_dict[str(self.categoryCB.currentText())]
+        region = str(loc_dict[str(self.regionCB.currentText())])
+        category = str(self.categoryCB.currentText())
         searchterm = str(self.lineEdit.text())
-        print mindate
-        print region
-        print category
-        print searchterm
         self.craig = craigList(region, category, searchterm, mindate)
+        if self.craig.cList == []:
+            print "empty craig!"
+            return
+        # for c in self.craig.cList: print c
         self.buildlist()
+        self.itemtest()
 
     def buildlist(self):
-        items = Items()
-        # for c in self.craig:
-        #     item = Item
-        #     item.price = c.price
-        #     item.descr = c.descr
-        #     item.email = c.email
-        #     item.phone = c.phone
-        #     item.date = c.date
-        # items.items.append(item)
+        # self.items = Items()
+        self.items = []
+        for c in self.craig.cList:
+            print c.price
+            item = Item()
+            item.price = str(c.price)
+            item.descr = str(c.descr)
+            item.email = str(c.email)
+            item.phone = str(c.phone)
+            item.date = str(c.date)
+        self.items.append(item)
 
     def viewlist(self):
         pass
-        
+
+    def itemtest(self):
+        print "showing window"
+        self.items[0].set_vals()
+        self.items[0].exec_()
 
 class Items(QtGui.QDialog, clistdesign.Ui_Dialog):
     def __init__(self, parent=None):
@@ -67,6 +76,12 @@ class Item(QtGui.QDialog, searchdesign.Ui_Dialog):
         self.email = None
         self.phone = None
         self.date = None
+
+    def set_vals(self):
+        self.label.setText(self.date)
+        # self.label_3.setText(self.region)
+        # self.label_6.setText(self.category)
+        # self.label_8.setText(self.searchterm)
 
 
 def main():
