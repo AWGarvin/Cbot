@@ -1,53 +1,8 @@
+from catadata import searchIndex
 from lxml import html
 import requests
 
 craigUrl = "craigslist.org"
-searchIndex = [
-("antiques","craigslist.org/search/ata"),
-("appliances","craigslist.org/search/ppa"),
-("arts+crafts","craigslist.org/search/ara"),
-("atv/utv/sno","craigslist.org/search/sna"),
-("auto parts","craigslist.org/search/pta"),
-("wheels/tires","craigslist.org/search/wta"),
-("baby+kid","craigslist.org/search/baa"),
-("barter","craigslist.org/search/bar"),
-("beauty+hlth","craigslist.org/search/haa"),
-("bikes","craigslist.org/search/bia"),
-("bike parts","craigslist.org/search/bip"),
-("boats","craigslist.org/search/boo"),
-("boat parts","craigslist.org/search/bpa"),
-("books","craigslist.org/search/bka"),
-("business","craigslist.org/search/bfa"),
-("cars+trucks","craigslist.org/search/cta"),
-("cds/dvd/vhs","craigslist.org/search/ema"),
-("cell phones","craigslist.org/search/moa"),
-("clothes+acc","craigslist.org/search/cla"),
-("collectibles","craigslist.org/search/cba"),
-("computers","craigslist.org/search/sya"),
-("computer parts","craigslist.org/search/syp"),
-("electronics","craigslist.org/search/ela"),
-("farm+garden","craigslist.org/search/gra"),
-("free","craigslist.org/search/zip"),
-("furniture","craigslist.org/search/fua"),
-("garage sale","craigslist.org/search/gms"),
-("general","craigslist.org/search/foa"),
-("heavy equip","craigslist.org/search/hva"),
-("household","craigslist.org/search/hsa"),
-("jewelry","craigslist.org/search/jwa"),
-("materials","craigslist.org/search/maa"),
-("motorcycles","craigslist.org/search/mca"),
-("motorcycle parts","craigslist.org/search/mpa"),
-("music instr","craigslist.org/search/msa"),
-("photo+video","craigslist.org/search/pha"),
-("rvs+camp","craigslist.org/search/rva"),
-("sporting","craigslist.org/search/sga"),
-("tickets","craigslist.org/search/tia"),
-("tools","craigslist.org/search/tla"),
-("toys+games","craigslist.org/search/taa"),
-("trailers","craigslist.org/search/tra"),
-("video gaming","craigslist.org/search/vga"),
-("wanted","craigslist.org/search/waa") ]
-
 
 class craigList:
     def __init__(self, sKeyword, sCity = "tallahassee"):
@@ -57,7 +12,6 @@ class craigList:
         self.sKey = sKeyword
         self.parseLinks()
         self.parsePage()
-
     def parseLinks(self):
         for entry in searchIndex:
             if self.sKey in entry[0]:
@@ -80,32 +34,47 @@ class craigList:
             if len(pageTable) < 10:
                 break
             self.pageLinks.append(pageTable)
-
     def parsePage(self):
-        #control = 0
+        control = 0
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
                 correctUrl = self.sCit + craigUrl + searchitem
-                cItem = craigItem(correctUrl)
+                cItem = craigItem(correctUrl, self.sCit)
                 self.cList.append(cItem)
-                #if control == 2:
-                #   break
-                #control += 1
-            #break
-
+                if control == 10:
+                   break
+                control += 1
+            break
 
 class craigItem:
-    def __init__(self, cPag):
+    def __init__(self, cPag, city):
+        self.cityurl = city
         iUrl = str(cPag)
         itemPage = requests.get(iUrl)
         self.itemPageTree = html.fromstring(itemPage.text)
         self.title = ''
         self.price = ''
         self.descr = ''
+        self.email = ''
+        self.date = ''
+        self.phone = ''
         self.setTitle()
         self.setPrice()
         self.setDescr()
-
+        self.setContact()
+        self.setDate()
+    def getTitle(self):
+        return str("".join(self.title))
+    def getPrice(self):
+        return str("".join(self.price))
+    def getDescr(self):
+        return str("".join(self.descr))
+    def getEmail(self):
+        return str("".join(self.email))
+    def getPhone(self):
+        return str("".join(self.phone))
+    def getDate(self):
+        return str(self.date[0])
     def setTitle(self):
         try:
             self.title = self.itemPageTree.xpath(
@@ -115,7 +84,6 @@ class craigItem:
         while '\n' in self.title: self.title.remove('\n')
         if self.title == []:
             self.title = ["Not Available"]
-
     def setPrice(self):
         try:
             self.price = self.itemPageTree.xpath(
@@ -125,7 +93,6 @@ class craigItem:
         while '\n' in self.price: self.price.remove('\n')
         if self.price == []:
             self.price = ["Not Available"]
-
     def setDescr(self):
         try:
             self.descr = self.itemPageTree.xpath(
@@ -135,14 +102,54 @@ class craigItem:
         while '\n' in self.descr: self.descr.remove('\n')
         if self.descr == []:
             self.descr = ["Not Available"]
-
+    def setContact(self):
+        replyLink = self.itemPageTree.xpath(
+                "//a[@id='replylink']/@href")
+        contactUrl = self.cityurl + craigUrl + replyLink[0]
+        contactPage = requests.get(contactUrl)
+        contactTree = html.fromstring(contactPage.text)
+        try:
+            self.phone = contactTree.xpath(
+                    "//ul/li/text()")
+        except:
+            self.phone = 'Not Available'
+        try:
+            self.email = contactTree.xpath(
+                    "//div[@class='anonemail']//text()")
+        except:
+            self.email = 'Not Available'
+        while '\n' in self.email: self.email.remove('\n')
+        count = 0
+        for entry in self.phone:
+            if '(' in entry:
+                self.phone = entry[2:]
+                break
+            if count == len(self.phone)-1:
+                self.phone = ['Not Available']
+            count += 1
+        if self.email == []:
+            self.email = ["Not Available"]
+        if len(self.phone) > 17:
+            self.phone = ["Not Available"]
+    def setDate(self):
+        try:
+            self.date = self.itemPageTree.xpath(
+                    "//time//text()")
+            self.date.pop()
+            self.date[0] = self.date[0][:10]
+        except:
+            self.date = 'Not Available'
+        while '\n' in self.date: self.date.remove('\n')
+        if self.date == []:
+            self.date = ["Not Available"]
     def __str__(self):
         returnthis = "title:\t" + "".join(self.title)\
         +"\nprice:\t" + "".join(self.price)\
-        +"\ndescr:\t" + "".join(self.descr)
+        +"\ndescr:\t" + "".join(self.descr)\
+        +"\nemail:\t" + "".join(self.email)\
+        +"\nphone:\t" + "".join(self.phone)\
+        +"\ndate:\t" + self.date[0]
         return returnthis.encode('utf-8')
-
-
 
 if __name__ == "__main__":
     c = craigList("antiques")
