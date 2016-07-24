@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'searchitem.ui'
+# Form implementation generated from reading ui file '../gui_design/searchdesign.ui'
 #
-# Created: Sun Jul 24 00:15:57 2016
+# Created: Sun Jul 24 02:51:25 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
