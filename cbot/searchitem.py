@@ -1,27 +1,29 @@
 from catadata import searchIndex
 from lxml import html
 import requests
-
+import sys
 craigUrl = "craigslist.org"
 
 class craigList:
-    def __init__(self, sKeyword, sCity = "tallahassee"):
+    def __init__(self, sRegion, sCatagory, sKeyword, sMinDate):
         self.pageLinks = []
         self.cList = []
-        self.sCit = "http://" + sCity + "."
-        self.sKey = sKeyword
+        self.sCit = "http://" + sRegion + "."
+        self.sCat = sCatagory
+        self.sKey = "?query=" + sKeyword
+        self.MinD = sMinDate
         self.parseLinks()
         self.parsePage()
     def parseLinks(self):
-        for entry in searchIndex:
-            if self.sKey in entry[0]:
-                pagewanted = entry[1]
+        for k,v in searchIndex.items():
+            if self.sCat in k:
+                pagewanted = v
                 break
             else:
-                print "page not found"
-                exit(0)
+                sys.stderr.write ("page not found\n")
+                return
         pageNum = 0
-        url = self.sCit + pagewanted
+        url = self.sCit + pagewanted + self.sKey
         while True:
             if pageNum == 0:
                 pass
@@ -39,7 +41,11 @@ class craigList:
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
                 correctUrl = self.sCit + craigUrl + searchitem
-                cItem = craigItem(correctUrl, self.sCit)
+                cItem = craigItem(correctUrl, self.sCit, self.MinD)
+                print cItem.getDate()
+                if 's' in cItem.getDate() or 'N' in cItem.getDate():
+                    control += 1
+                    continue
                 self.cList.append(cItem)
                 if control == 10:
                    break
@@ -47,7 +53,10 @@ class craigList:
             break
 
 class craigItem:
-    def __init__(self, cPag, city):
+    def __init__(self, cPag, city, minDate):
+        self.minY = int(minDate[:4])
+        self.minM = int(minDate[5:7])
+        self.minD = int(minDate[8:])
         self.cityurl = city
         iUrl = str(cPag)
         itemPage = requests.get(iUrl)
@@ -137,6 +146,15 @@ class craigItem:
                     "//time//text()")
             self.date.pop()
             self.date[0] = self.date[0][:10]
+            Y = int(self.date[0][:4])
+            M = int(self.date[0][5:7])
+            D = int(self.date[0][8:])
+            print Y, M, D
+            if Y == self.minY:
+                if M <= self.minM:
+                    if D < self.minD:
+                        print "i am smaller"
+                        self.date[0] = ['stop']
         except:
             self.date = 'Not Available'
         while '\n' in self.date: self.date.remove('\n')
@@ -152,7 +170,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("antiques")
+    c = craigList("tallahassee","antiques","chair", "2016-07-10")
     number = 1
     print "***********************************************"
     for it in c.cList:
