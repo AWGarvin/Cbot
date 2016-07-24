@@ -149,12 +149,9 @@ class craigItem:
             Y = int(self.date[0][:4])
             M = int(self.date[0][5:7])
             D = int(self.date[0][8:])
-            print Y, M, D
-            if Y == self.minY:
-                if M <= self.minM:
-                    if D < self.minD:
-                        print "i am smaller"
-                        self.date[0] = ['stop']
+            dateval = lambda y, m, d: y*365+ m*30 + d
+            if dateval(Y, M, D) > dateval(self.minY, self.minM, self.minD):
+                self.date[0] = ['stop']
         except:
             self.date = 'Not Available'
         while '\n' in self.date: self.date.remove('\n')
