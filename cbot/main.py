@@ -3,7 +3,7 @@ import sys
 import design
 from regionaldata import loc_dict
 from catadata import searchIndex
-from searchitem import craigList
+#from searchitem import craigList
 
 class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
     def __init__(self, parent=None):
@@ -21,6 +21,7 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
         category = self.categoryCB.currentText()
         searchterm = self.lineEdit.text()
         #self.craig = craigList(region, category, searchterm, mindate)
+
 
 def main():
     app = QtGui.QApplication(sys.argv)
