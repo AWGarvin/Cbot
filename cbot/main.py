@@ -9,6 +9,7 @@ from searchitem import *
 import collections
 #from searchitem import craigList
 
+
 class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
     def __init__(self, parent=None):
         super(Cbot, self).__init__(parent)
@@ -82,6 +83,8 @@ class Item(QtGui.QDialog, searchdesign.Ui_Dialog):
         # self.label_3.setText(self.region)
         # self.label_6.setText(self.category)
         # self.label_8.setText(self.searchterm)
+        # need to change label names
+        # need more information from parser
 
 
 def main():
