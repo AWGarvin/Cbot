@@ -1,4 +1,7 @@
 from PyQt4 import QtGui
+from PyQt4 import QtCore
+# from PyQt4.QtCore import *
+# from PyQt4.QtGui import *
 import sys
 import design
 import searchdesign
@@ -8,6 +11,7 @@ from regionaldata import loc_dict
 from catadata import searchIndex
 from searchitem import *
 import collections
+from threading import Thread
 #from searchitem import craigList
 
 
@@ -22,9 +26,12 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
         self.categoryCB.insertItem(0, 'free')
         self.categoryCB.insertItems(1, [c for c in sorted(searchIndex)
                                         if c != 'free'])
-        self.searchBTN.clicked.connect(self.search)
+        self.searchBTN.clicked.connect(self.threadsearch)
         self.viewBTN.clicked.connect(self.viewitemslist)
 
+    def threadsearch(self):
+        Thread(target=self.search, args=()).start()
+        #self.connect(self.search, QtCore.SIGNAL("threadDone(QString)"), self.threadDone, QtCore.Qt.DirectConnection)
 
     def search(self):
         mindate = str(self.dateEdit.date().toPyDate())
@@ -38,27 +45,23 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
         self.buildlist()
 
     def buildlist(self):
-        # self.items = Items()
         for c in self.craig.cList:
-            item = Item()
-            item.price = str(c.price)[2:-2]
-            item.descr = str(c.descr)[2:-2]
-            item.email = str(c.email)[2:-2]
-            item.phone = str(c.phone)[2:-2]
-            item.date = str(c.date)[2:-2]
+            # item = Item(self)
+            item = DisplayItem()
+            # item.price = str(c.price)[2:-2]
+            # item.descr = str(c.descr)[2:-2]
+            # item.email = str(c.email)[2:-2]
+            # item.phone = str(c.phone)[2:-2]
+            # item.date = str(c.date)[2:-2]
             item.title = str(c.title)[2:-2]
             self.items.append(item)
 
     def viewitemslist(self):
         ilist = ItemList(self)
         if ilist.exec_():
-            print ilist.getposttitle()
-        
-    # def itemtest(self):
-    #     print "showing window"
-    #     self.items[0].set_vals()
-    #     self.items[0].exec_()
-
+            title = ilist.getposttitle()
+            post = [i for i in self.items if title == i.title][0]
+            post.exec_()
 
 class ItemList(QtGui.QDialog, searchlistdesign.Ui_Dialog):
     def __init__(self, parent=None):
@@ -71,12 +74,11 @@ class ItemList(QtGui.QDialog, searchlistdesign.Ui_Dialog):
     def getposttitle(self):
         return self.postCB.currentText()
         
-# class Items(QtGui.QDialog, clistdesign.Ui_Dialog):
-#     def __init__(self, parent=None):
-#         super(Items, self).__init__(parent)
-#         self.setupUi(self)
-#         # self.items = []
-        
+
+class DisplayItem():
+    def __init__(self):
+        self.title = None
+
 
 class Item(QtGui.QDialog, searchdesign.Ui_Dialog):
     def __init__(self, parent=None):
