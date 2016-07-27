@@ -13,20 +13,15 @@ class craigList:
         self.sKey = "?query=" + sKeyword
         self.MinD = sMinDate
         self.parseLinks()
-        self.parsePage()
+        if self.pageLinks == []:
+            pass
+        else:
+            self.parsePage()
     def parseLinks(self):
-        # print searchIndex.items()
         for k,v in searchIndex.items():
-            # print self.sCat
-            # print k
-            # print v
             if self.sCat in k:
                 pagewanted = v
-                # print "FOUND IT"
                 break
-            # else:
-            #     sys.stderr.write ("page not found\n")
-            #     return
         pageNum = 0
         url = self.sCit + pagewanted + self.sKey
         while True:
@@ -38,7 +33,8 @@ class craigList:
             cPage = requests.get(url)
             pageTree = html.fromstring(cPage.text)
             pageTable = pageTree.xpath("//a[@class='hdrlnk']/@href")
-            if len(pageTable) < 10:
+            print pageTable
+            if len(pageTable) < 10 or pageTable == []:
                 break
             self.pageLinks.append(pageTable)
     def parsePage(self):
@@ -68,12 +64,6 @@ class craigItem:
         iUrl = str(cPag)
         itemPage = requests.get(iUrl)
         self.itemPageTree = html.fromstring(itemPage.text)
-        self.title = ''
-        self.price = ''
-        self.descr = ''
-        self.email = ''
-        self.date = ''
-        self.phone = ''
         self.setTitle()
         self.setPrice()
         self.setDescr()
@@ -175,7 +165,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","chair", "2016-07-10")
+    c = craigList("tallahassee","antiques","dolkdfa", "2016-07-10")
     number = 1
     print "***********************************************"
     for it in c.cList:
