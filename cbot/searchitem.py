@@ -52,11 +52,11 @@ class craigList:
                 if "none" in cItem.getTitle():
                     continue
                 if 's' in cItem.getDate() or 'N' in cItem.getDate():
-                    control += 1
-                    continue
+                    #control += 1
+                    break
                 self.cList.append(cItem)
-                if control == 10:
-                   break
+                #if control == 10:
+                 #  break
                 control += 1
             break
 
@@ -179,7 +179,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","chair", "2016-07-10")
+    c = craigList("tallahassee","antiques","chair", "2016-07-01")
     number = 1
     print "***********************************************"
     for it in c.cList:
