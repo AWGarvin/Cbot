@@ -23,20 +23,23 @@ class craigList:
                 pagewanted = v
                 break
         pageNum = 0
-        url = self.sCit + pagewanted + self.sKey
+
         while True:
+            url = self.sCit + pagewanted + self.sKey
             if pageNum == 0:
                 pass
             else:
-                url = self.sCit + pagewanted + "?s=" + str(pageNum)
+                url += "&s=" + str(pageNum)
+            url += "&sort=date"
+            print url
             pageNum += 100
             cPage = requests.get(url)
             pageTree = html.fromstring(cPage.text)
             pageTable = pageTree.xpath("//a[@class='hdrlnk']/@href")
-            print pageTable
             if len(pageTable) < 10 or pageTable == []:
                 break
             self.pageLinks.append(pageTable)
+            pageTable = []
     def parsePage(self):
         control = 0
         for pageLink in self.pageLinks:
@@ -46,6 +49,8 @@ class craigList:
                 if craigUrl in searchitem: break
                 cItem = craigItem(correctUrl, self.sCit, self.MinD)
                 #print cItem.getDate()
+                if "none" in cItem.getTitle():
+                    continue
                 if 's' in cItem.getDate() or 'N' in cItem.getDate():
                     control += 1
                     continue
@@ -62,7 +67,12 @@ class craigItem:
         self.minD = int(minDate[8:])
         self.cityurl = city
         iUrl = str(cPag)
-        itemPage = requests.get(iUrl)
+        print iUrl
+        try:
+            itemPage = requests.get(iUrl)
+        except:
+            self.title = ["none"]
+            return
         self.itemPageTree = html.fromstring(itemPage.text)
         self.setTitle()
         self.setPrice()
@@ -95,7 +105,7 @@ class craigItem:
             self.price = self.itemPageTree.xpath(
                     "//span[@class='postingtitletext']/span[@class='price']//text()")
         except:
-            self.price = "Not Available"
+            self.price = ["Not Available"]
         while '\n' in self.price: self.price.remove('\n')
         if self.price == []:
             self.price = ["Not Available"]
@@ -104,13 +114,17 @@ class craigItem:
             self.descr = self.itemPageTree.xpath(
                     "//section[@id='postingbody']//text()")
         except:
-            self.descr = 'Not Available'
+            self.descr = ['Not Available']
         while '\n' in self.descr: self.descr.remove('\n')
         if self.descr == []:
             self.descr = ["Not Available"]
     def setContact(self):
         replyLink = self.itemPageTree.xpath(
                 "//a[@id='replylink']/@href")
+        if replyLink == []:
+            self.phone = ['Not Available']
+            self.email = ['Not Available']
+            return
         contactUrl = self.cityurl + craigUrl + replyLink[0]
         contactPage = requests.get(contactUrl)
         contactTree = html.fromstring(contactPage.text)
@@ -118,12 +132,12 @@ class craigItem:
             self.phone = contactTree.xpath(
                     "//ul/li/text()")
         except:
-            self.phone = 'Not Available'
+            self.phone = ['Not Available']
         try:
             self.email = contactTree.xpath(
                     "//div[@class='anonemail']//text()")
         except:
-            self.email = 'Not Available'
+            self.email = ['Not Available']
         while '\n' in self.email: self.email.remove('\n')
         count = 0
         for entry in self.phone:
@@ -135,7 +149,7 @@ class craigItem:
             count += 1
         if self.email == []:
             self.email = ["Not Available"]
-        if len(self.phone) > 17:
+        if len(self.phone) > 17 or self.phone == []:
             self.phone = ["Not Available"]
     def setDate(self):
         try:
@@ -151,7 +165,7 @@ class craigItem:
                 self.date[0] = ['stop']
             # print self.date[0]
         except:
-            self.date = 'Not Available'
+            self.date = ['Not Available']
         while '\n' in self.date: self.date.remove('\n')
         if self.date == []:
             self.date = ["Not Available"]
@@ -165,7 +179,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","dolkdfa", "2016-07-10")
+    c = craigList("tallahassee","antiques","chair", "2016-07-10")
     number = 1
     print "***********************************************"
     for it in c.cList:
