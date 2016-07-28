@@ -1,9 +1,10 @@
 from catadata import searchIndex
 from lxml import html
+import threading
 import requests
 import sys
 craigUrl = "craigslist.org"
-
+#random change
 class craigList:
     def __init__(self, sRegion, sCatagory, sKeyword, sMinDate):
         self.pageLinks = []
@@ -11,7 +12,7 @@ class craigList:
         self.cList = []
         self.sCit = "http://" + sRegion + "."
         self.sCat = sCatagory
-        self.sKey = "?query=" + sKeyword
+        self.sKey = "?query=" + sKeyword.lower()
         self.MinD = sMinDate
         self.parseLinks()
         self.minY = int(sMinDate[:4])
@@ -196,7 +197,7 @@ class craigItem:
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","chair", "2016-07-05")
+    c = craigList("tallahassee","antiques","chair", "2016-07-26")
     number = 1
     print "***********************************************"
     for it in c.cList:
