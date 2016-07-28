@@ -7,12 +7,16 @@ craigUrl = "craigslist.org"
 class craigList:
     def __init__(self, sRegion, sCatagory, sKeyword, sMinDate):
         self.pageLinks = []
+        self.dateTables = []
         self.cList = []
         self.sCit = "http://" + sRegion + "."
         self.sCat = sCatagory
         self.sKey = "?query=" + sKeyword
         self.MinD = sMinDate
         self.parseLinks()
+        self.minY = int(sMinDate[:4])
+        self.minM = int(sMinDate[5:7])
+        self.minD = int(sMinDate[8:])
         if self.pageLinks == []:
             pass
         else:
@@ -36,35 +40,45 @@ class craigList:
             cPage = requests.get(url)
             pageTree = html.fromstring(cPage.text)
             pageTable = pageTree.xpath("//a[@class='hdrlnk']/@href")
+            dateTable = pageTree.xpath("//span[@class='pl']/time/@datetime")
+            print pageTable, len(pageTable)
+            print dateTable, len(dateTable)
             if len(pageTable) < 10 or pageTable == []:
                 break
             self.pageLinks.append(pageTable)
+            self.dateTables.append(dateTable)
             pageTable = []
     def parsePage(self):
-        control = 0
+        x = 0
+        y = 0
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
-                #print searchitem
                 correctUrl = self.sCit + craigUrl + searchitem
                 if craigUrl in searchitem: break
-                cItem = craigItem(correctUrl, self.sCit, self.MinD)
-                #print cItem.getDate()
+                testDate = self.dateTables[x][y]
+                testD = testDate[:10]
+                Y = int(testD[:4])
+                M = int(testD[5:7])
+                D = int(testD[8:])
+                dateval = lambda y, m, d: y * 365 + m*30 + d
+                if dateval(Y, M, D) < dateval(self.minY, self.minM, self.minD):
+                    return
+                cItem = craigItem(correctUrl, self.sCit, self.MinD, testD)
                 if "none" in cItem.getTitle():
                     continue
                 if 's' in cItem.getDate() or 'N' in cItem.getDate():
-                    #control += 1
-                    break
+                    pass
+                    #continue
                 self.cList.append(cItem)
-                #if control == 10:
-                 #  break
-                control += 1
-            break
+                y += 1
+            x += 1
 
 class craigItem:
-    def __init__(self, cPag, city, minDate):
+    def __init__(self, cPag, city, minDate, upDte):
         self.minY = int(minDate[:4])
         self.minM = int(minDate[5:7])
         self.minD = int(minDate[8:])
+        self.upDate = upDte
         self.cityurl = city
         iUrl = str(cPag)
         print iUrl
@@ -91,6 +105,8 @@ class craigItem:
         return str("".join(self.phone))
     def getDate(self):
         return str(self.date[0])
+    def getUpDate(self):
+        return str(self.upDate)
     def setTitle(self):
         try:
             self.title = self.itemPageTree.xpath(
@@ -162,8 +178,8 @@ class craigItem:
             D = int(self.date[0][8:])
             dateval = lambda y, m, d: y * 365 + m*30 + d
             if dateval(Y, M, D) < dateval(self.minY, self.minM, self.minD):
-                self.date[0] = ['stop']
-            # print self.date[0]
+                pass
+                #self.date[0] = ['stop']
         except:
             self.date = ['Not Available']
         while '\n' in self.date: self.date.remove('\n')
@@ -175,11 +191,12 @@ class craigItem:
         +"\ndescr:\t" + "".join(self.descr)\
         +"\nemail:\t" + "".join(self.email)\
         +"\nphone:\t" + "".join(self.phone)\
-        +"\ndate:\t" + self.date[0]
+        +"\ndate:\t" + self.date[0]\
+        +"\nupDate:\t" + self.upDate
         return returnthis.encode('utf-8')
 
 if __name__ == "__main__":
-    c = craigList("tallahassee","antiques","chair", "2016-07-01")
+    c = craigList("tallahassee","antiques","chair", "2016-07-05")
     number = 1
     print "***********************************************"
     for it in c.cList:
