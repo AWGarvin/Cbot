@@ -59,7 +59,6 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
             item.phone = c.getPhone()
             item.date = c.getDate()
             item.title = c.getTitle()
-            
             self.items.append(item)
 
     def viewitemslist(self):
@@ -68,7 +67,7 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
             try:
                 title = ilist.getposttitle()
                 post = [i for i in self.items if title == i.title][0]
-                DisplayItem(post).exec_()
+                DisplayItem(post, self).exec_()
             except IndexError: pass
 
 
@@ -104,6 +103,8 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
     def __init__(self, item, parent=None):
         super(DisplayItem, self).__init__(parent)
         self.setupUi(self)
+        self.parent = parent
+        self.item = item
         text = """\
         \r Title: %s\
         \r Price: %s\
@@ -114,6 +115,22 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         """%(item.title, item.price, item.date,
              item.phone, item.email, item.descr)
         self.textBrowser.setText(text)
+        self.nextBTN.clicked.connect(self._next)
+        self.prevBTN.clicked.connect(self._prev)
+
+    def _next(self):
+        self.switchwindow(1)
+        
+    def _prev(self):
+        self.switchwindow(-1)
+
+    def switchwindow(self, n):
+        for i in range(0,len(self.parent.items)):
+            if self.parent.items[i].title == self.item.title:
+                post = self.parent.items[(i+n)%len(self.parent.items)]
+                break
+        DisplayItem(post, self.parent).exec_()
+        self.close()
 
 
 def main():
