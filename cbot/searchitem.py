@@ -36,14 +36,14 @@ class craigList:
             else:
                 url += "&s=" + str(pageNum)
             url += "&sort=date"
-            print url
+            #print url
             pageNum += 100
             cPage = requests.get(url)
             pageTree = html.fromstring(cPage.text)
             pageTable = pageTree.xpath("//a[@class='hdrlnk']/@href")
             dateTable = pageTree.xpath("//span[@class='pl']/time/@datetime")
-            print pageTable, len(pageTable)
-            print dateTable, len(dateTable)
+            #print pageTable, len(pageTable)
+            #print dateTable, len(dateTable)
             if len(pageTable) < 10 or pageTable == []:
                 break
             self.pageLinks.append(pageTable)
@@ -52,6 +52,7 @@ class craigList:
     def parsePage(self):
         x = 0
         y = 0
+        threads = []
         for pageLink in self.pageLinks:
             for searchitem in pageLink:
                 correctUrl = self.sCit + craigUrl + searchitem
@@ -65,26 +66,29 @@ class craigList:
                 if dateval(Y, M, D) < dateval(self.minY, self.minM, self.minD):
                     return
                 t = threading.Thread(target=self.parseItem, args=(correctUrl, testD,))
-                t.start()
+                threads.append(t)
                 y += 1
             x += 1
+        for t in threads: t.start()
+        for t in threads: t.join()
     def parseItem(self, cU, tD):
         cItem = craigItem(cU, self.sCit, self.MinD, tD)
+        print cItem.getTitle()
         if "none" in cItem.getTitle():
             return
         if 's' in cItem.getDate() or 'N' in cItem.getDate():
             pass
             #continue
         self.cList.append(cItem)
-        print "***********************************************"
-        print type(cItem.getTitle())
-        print type(cItem.getPrice())
-        print type(cItem.getDescr())
-        print type(cItem.getEmail())
-        print type(cItem.getPhone())
-        print type(cItem.getDate())
-        print type(cItem.getUpDate())        
-        print "***********************************************"
+        # print "***********************************************"
+        # print type(cItem.getTitle())
+        # print type(cItem.getPrice())
+        # print type(cItem.getDescr())
+        # print type(cItem.getEmail())
+        # print type(cItem.getPhone())
+        # print type(cItem.getDate())
+        # print type(cItem.getUpDate())        
+        # print "***********************************************"
         return
 
 class craigItem:
@@ -95,7 +99,7 @@ class craigItem:
         self.upDate = upDte
         self.cityurl = city
         iUrl = str(cPag)
-        print iUrl
+        #print iUrl
         try:
             itemPage = requests.get(iUrl)
         except:
@@ -107,7 +111,7 @@ class craigItem:
         self.setDescr()
         self.setContact()
         self.setDate()
-        print "complete"
+        #print "complete"
     def getTitle(self):
         return "".join(self.title).encode('utf-8')
     def getPrice(self):
@@ -209,6 +213,7 @@ class craigItem:
         +"\ndate:\t" + self.date[0]\
         +"\nupDate:\t" + self.upDate
         return returnthis.encode('utf-8')
+
 
 if __name__ == "__main__":
     c = craigList("tallahassee","antiques","chair", "2016-07-26")
