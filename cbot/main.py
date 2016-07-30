@@ -99,6 +99,7 @@ class Item():
         # need link to listing
         # post id number possibly
 
+
 class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
     def __init__(self, item, parent=None):
         super(DisplayItem, self).__init__(parent)
