@@ -33,6 +33,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="imgButton">
+        <property name="text">
+         <string>Images</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="nextBTN">
         <property name="text">
          <string>Next</string>

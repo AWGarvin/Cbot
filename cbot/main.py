@@ -4,10 +4,13 @@ from PyQt4 import QtCore
 # from PyQt4.QtGui import *
 import sys
 import design
+import urllib
+import requests
 import searchdesign
 import clistdesign
 import searchlistdesign
 import postviewerdesign
+import itemviewerdesign
 from regionaldata import loc_dict
 from catadata import searchIndex
 from searchitem import *
@@ -18,7 +21,6 @@ from threading import Thread
 
 ################################################################################
 # GIVE THE WINDOWS RELEVANT TITLES
-# HANDLE NO RESULTS FOUND IN PARSER
 # FIX WEIRD THING AT TOP OF MAIN WINDOW
 ################################################################################
 
@@ -59,9 +61,14 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
             item.phone = c.getPhone()
             item.date = c.getDate()
             item.title = c.getTitle()
+            item.pics = c.getImages()
+            # print item.pics
             self.items.append(item)
 
     def viewitemslist(self):
+        # plist = DisplayImage(self, None)
+        # plist.exec_()
+
         ilist = ItemList(self)
         if ilist.exec_():
             try:
@@ -95,6 +102,7 @@ class Item():
         self.email = None #
         self.phone = None #
         self.date = None #
+        self.pics = None #
         # need to also send carrier
         # need link to listing
         # post id number possibly
@@ -118,6 +126,45 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         self.textBrowser.setText(text)
         self.nextBTN.clicked.connect(self._next)
         self.prevBTN.clicked.connect(self._prev)
+        self.imgButton.clicked.connect(self._img)
+
+    def _next(self):
+        self.switchwindow(1)
+        
+    def _prev(self):
+        self.switchwindow(-1)
+
+    def _img(self):
+        DisplayImage(self.item.pics, 0, self).exec_()
+        
+
+    def switchwindow(self, n):
+        for i in range(0,len(self.parent.items)):
+            if self.parent.items[i].title == self.item.title:
+                post = self.parent.items[(i+n)%len(self.parent.items)]
+                break
+        self.close()
+        DisplayItem(post, self.parent).exec_()
+
+
+class DisplayImage(QtGui.QDialog, itemviewerdesign.Ui_Dialog):
+    def __init__(self, images, imgnum, parent=None):
+        super(DisplayImage, self).__init__(parent)
+        self.parent = parent
+        self.setupUi(self)
+        self.parent = parent
+        self.imgNumber = imgnum
+        self.url = images[self.imgNumber]
+        self.data = urllib.urlopen(self.url).read()
+        self.image = QtGui.QImage()
+        self.image.loadFromData(self.data)
+        self.pixmap = QtGui.QPixmap.fromImage(self.image)
+        self.label.setPixmap(self.pixmap)
+        self.label.setScaledContents(True)
+
+        self.pushButton.clicked.connect(self._next)
+        self.pushButton_2.clicked.connect(self._prev)
+
 
     def _next(self):
         self.switchwindow(1)
@@ -126,13 +173,12 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         self.switchwindow(-1)
 
     def switchwindow(self, n):
-        for i in range(0,len(self.parent.items)):
-            if self.parent.items[i].title == self.item.title:
-                post = self.parent.items[(i+n)%len(self.parent.items)]
-                break
-        DisplayItem(post, self.parent).exec_()
+        imgnum = (self.imgNumber + n) % len(self.parent.item.pics)
+        nextImg = DisplayImage(self.parent.item.pics, imgnum, self.parent)
         self.close()
+        nextImg.exec_()
 
+        
 
 def main():
     app = QtGui.QApplication(sys.argv)

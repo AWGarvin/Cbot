@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../gui_design/postviewerdesign.ui'
+# Form implementation generated from reading ui file '../gui_design/itemviewerdesign.ui'
 #
-# Created: Sat Jul 30 17:38:25 2016
+# Created: Sat Jul 30 17:13:48 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,29 +26,22 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(411, 278)
-        self.verticalLayoutWidget = QtGui.QWidget(Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 411, 281))
-        self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setMargin(0)
+        Dialog.resize(400, 300)
+        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.prevBTN = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.prevBTN.setObjectName(_fromUtf8("prevBTN"))
-        self.horizontalLayout.addWidget(self.prevBTN)
-        self.imgButton = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.imgButton.setObjectName(_fromUtf8("imgButton"))
-        self.horizontalLayout.addWidget(self.imgButton)
-        self.nextBTN = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.nextBTN.setObjectName(_fromUtf8("nextBTN"))
-        self.horizontalLayout.addWidget(self.nextBTN)
+        self.pushButton = QtGui.QPushButton(Dialog)
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtGui.QPushButton(Dialog)
+        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.horizontalLayout.addWidget(self.pushButton_2)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.textBrowser = QtGui.QTextBrowser(self.verticalLayoutWidget)
-        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
-        self.verticalLayout.addWidget(self.textBrowser)
-        self.buttonBox = QtGui.QDialogButtonBox(self.verticalLayoutWidget)
+        self.label = QtGui.QLabel(Dialog)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.verticalLayout.addWidget(self.label)
+        self.buttonBox = QtGui.QDialogButtonBox(Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
@@ -61,7 +54,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
-        self.prevBTN.setText(_translate("Dialog", "Prev", None))
-        self.imgButton.setText(_translate("Dialog", "Images", None))
-        self.nextBTN.setText(_translate("Dialog", "Next", None))
+        self.pushButton.setText(_translate("Dialog", "PREV", None))
+        self.pushButton_2.setText(_translate("Dialog", "NEXT", None))
+        self.label.setText(_translate("Dialog", "TextLabel", None))
 
