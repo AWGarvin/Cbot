@@ -4,7 +4,7 @@ import threading
 import requests
 import sys
 craigUrl = "craigslist.org"
-#random change
+
 class craigList:
     def __init__(self, sRegion, sCatagory, sKeyword, sMinDate):
         self.pageLinks = []
@@ -64,15 +64,28 @@ class craigList:
                 dateval = lambda y, m, d: y * 365 + m*30 + d
                 if dateval(Y, M, D) < dateval(self.minY, self.minM, self.minD):
                     return
-                cItem = craigItem(correctUrl, self.sCit, self.MinD, testD)
-                if "none" in cItem.getTitle():
-                    continue
-                if 's' in cItem.getDate() or 'N' in cItem.getDate():
-                    pass
-                    #continue
-                self.cList.append(cItem)
+                t = threading.Thread(target=self.parseItem, args=(correctUrl, testD,))
+                t.start()
                 y += 1
             x += 1
+    def parseItem(self, cU, tD):
+        cItem = craigItem(cU, self.sCit, self.MinD, tD)
+        if "none" in cItem.getTitle():
+            return
+        if 's' in cItem.getDate() or 'N' in cItem.getDate():
+            pass
+            #continue
+        self.cList.append(cItem)
+        print "***********************************************"
+        print type(cItem.getTitle())
+        print type(cItem.getPrice())
+        print type(cItem.getDescr())
+        print type(cItem.getEmail())
+        print type(cItem.getPhone())
+        print type(cItem.getDate())
+        print type(cItem.getUpDate())        
+        print "***********************************************"
+        return
 
 class craigItem:
     def __init__(self, cPag, city, minDate, upDte):
@@ -94,16 +107,17 @@ class craigItem:
         self.setDescr()
         self.setContact()
         self.setDate()
+        print "complete"
     def getTitle(self):
-        return str("".join(self.title))
+        return "".join(self.title).encode('utf-8')
     def getPrice(self):
-        return str("".join(self.price))
+        return "".join(self.price).encode('utf-8')
     def getDescr(self):
-        return str("".join(self.descr))
+        return "".join(self.descr).encode('utf-8')
     def getEmail(self):
-        return str("".join(self.email))
+        return "".join(self.email).encode('utf-8')
     def getPhone(self):
-        return str("".join(self.phone))
+        return "".join(self.phone).encode('utf-8')
     def getDate(self):
         return str(self.date[0])
     def getUpDate(self):
