@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../gui_design/main_window.ui'
 #
-# Created: Sat Jul 23 21:24:38 2016
+# Created: Wed Jul 27 20:53:23 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -42,6 +42,7 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.horizontalLayout_4.addWidget(self.label_5)
         self.dateEdit = QtGui.QDateEdit(self.centralwidget)
+        self.dateEdit.setDate(QtCore.QDate(2016, 1, 1))
         self.dateEdit.setObjectName(_fromUtf8("dateEdit"))
         self.horizontalLayout_4.addWidget(self.dateEdit)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)

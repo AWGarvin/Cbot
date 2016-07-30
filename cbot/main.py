@@ -17,7 +17,9 @@ from threading import Thread
 
 
 ################################################################################
-# GIVE THE WINDOWS RELEVANT TITLES 
+# GIVE THE WINDOWS RELEVANT TITLES
+# HANDLE NO RESULTS FOUND IN PARSER
+# FIX WEIRD THING AT TOP OF MAIN WINDOW
 ################################################################################
 
 class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
@@ -36,7 +38,6 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
 
     def threadsearch(self):
         Thread(target=self.search, args=()).start()
-        #self.connect(self.search, QtCore.SIGNAL("threadDone(QString)"), self.threadDone, QtCore.Qt.DirectConnection)
 
     def search(self):
         mindate = str(self.dateEdit.date().toPyDate())
@@ -51,14 +52,13 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
 
     def buildlist(self):
         for c in self.craig.cList:
-            # item = Item(self)
             item = Item()
-            item.price = str(c.price)[2:-2]
-            item.descr = str(c.descr)
-            item.email = str(c.email)[2:-2]
-            item.phone = str(c.phone)[2:-2]
-            item.date = str(c.date)[2:-2]
-            item.title = str(c.title)[2:-2]
+            item.price = c.getPrice()
+            item.descr = c.getDescr()
+            item.email = c.getEmail()
+            item.phone = c.getPhone()
+            item.date = c.getDate()
+            item.title = c.getTitle()
             self.items.append(item)
 
     def viewitemslist(self):
@@ -67,8 +67,9 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
             try:
                 title = ilist.getposttitle()
                 post = [i for i in self.items if title == i.title][0]
-                DisplayItem(post).exec_()
+                DisplayItem(post, self).exec_()
             except IndexError: pass
+
 
 class ItemList(QtGui.QDialog, searchlistdesign.Ui_Dialog):
     def __init__(self, parent=None):
@@ -85,9 +86,9 @@ class ItemList(QtGui.QDialog, searchlistdesign.Ui_Dialog):
 class Item():
     def __init__(self):
         # lines followed by hash will be needed for email
-        self.region = None
-        self.category = None #
-        self.searchterm = None #
+        # self.region = None
+        # self.category = None #
+        # self.searchterm = None #
         self.title = None #
         self.descr = None #
         self.price = None #
@@ -102,6 +103,8 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
     def __init__(self, item, parent=None):
         super(DisplayItem, self).__init__(parent)
         self.setupUi(self)
+        self.parent = parent
+        self.item = item
         text = """\
         \r Title: %s\
         \r Price: %s\
@@ -112,6 +115,22 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         """%(item.title, item.price, item.date,
              item.phone, item.email, item.descr)
         self.textBrowser.setText(text)
+        self.nextBTN.clicked.connect(self._next)
+        self.prevBTN.clicked.connect(self._prev)
+
+    def _next(self):
+        self.switchwindow(1)
+        
+    def _prev(self):
+        self.switchwindow(-1)
+
+    def switchwindow(self, n):
+        for i in range(0,len(self.parent.items)):
+            if self.parent.items[i].title == self.item.title:
+                post = self.parent.items[(i+n)%len(self.parent.items)]
+                break
+        DisplayItem(post, self.parent).exec_()
+        self.close()
 
 
 def main():
