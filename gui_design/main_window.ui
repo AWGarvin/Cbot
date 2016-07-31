@@ -23,7 +23,7 @@
          <widget class="QComboBox" name="carrierBox">
           <item>
            <property name="text">
-            <string>Verison</string>
+            <string>Verizon</string>
            </property>
           </item>
           <item>

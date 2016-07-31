@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../gui_design/main_window.ui'
 #
-# Created: Sat Jul 30 21:25:44 2016
+# Created: Sat Jul 30 22:50:48 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        self.carrierBox.setItemText(0, _translate("MainWindow", "Verison", None))
+        self.carrierBox.setItemText(0, _translate("MainWindow", "Verizon", None))
         self.carrierBox.setItemText(1, _translate("MainWindow", "Sprint", None))
         self.carrierBox.setItemText(2, _translate("MainWindow", "AT&T", None))
         self.carrierBox.setItemText(3, _translate("MainWindow", "T-Mobile", None))

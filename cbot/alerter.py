@@ -9,7 +9,7 @@ from email.MIMEImage import MIMEImage
 '''User:craigslistpythonproject@gmail.com'''
 '''Pass:Programmingisfun1'''
 
-def alerter(item, recipient, imgurl, phone_num = None, carrier = None):
+def alerter(item, recipient, phone_num = None, carrier = None):
 	sender = "craigslistpythonproject@gmail.com"	
 	if phone_num:
 		phone_num = str(phone_num)
@@ -51,15 +51,16 @@ def alerter(item, recipient, imgurl, phone_num = None, carrier = None):
 			textbody = "An e-mail has been sent to you regarding your craigslist search of: " + item.title
 			textmessage.attach(MIMEText(textbody, 'plain'))
 		
-		#open, save and close image
-		urllib.urlretrieve(imgurl, "test.jpg")
-		img = open('test.jpg', 'rb')
-		messageimage = MIMEImage(img.read())
-		img.close()
+		for pic in item.pics:
+			#open, save and close image
+			urllib.urlretrieve(pic, "test.jpg")
+			img = open('test.jpg', 'rb')
+			messageimage = MIMEImage(img.read())
+			img.close()
 
-		#attach image to message
-		messageimage.add_header('Content-ID', '<image1>')
-		message.attach(messageimage)
+			#attach image to message
+			messageimage.add_header('Content-ID', '<image1>')
+			message.attach(messageimage)
 		
 		#conect to server and send email and text
 		server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -71,7 +72,7 @@ def alerter(item, recipient, imgurl, phone_num = None, carrier = None):
 		server.quit() 
 
 #test class and test main
-
+'''
 class Item():
     def __init__(self):
         # lines followed by hash will be needed for email
@@ -97,19 +98,7 @@ if __name__ == "__main__":
 	carrier = "Verizon"
 	alerter(item1, recipient, imgurl, phone_num, carrier)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+'''
 
 
 

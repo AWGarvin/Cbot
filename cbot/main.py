@@ -14,6 +14,7 @@ import itemviewerdesign
 from regionaldata import loc_dict
 from catadata import searchIndex
 from searchitem import *
+from alerter import *
 import collections
 from threading import Thread
 #from searchitem import craigList
@@ -147,13 +148,14 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         DisplayImage(self.item.pics, 0, self).exec_()
 
     def _email(self):
-        email = self.parent.emailEdit.text()
+        email = str(self.parent.emailEdit.text())
         item = self.item
-        carrier = self.parent.carrierBox.currentText()
-        phone = self.parent.phoneEdit.text()
+        carrier = str(self.parent.carrierBox.currentText())
+        phone = str(self.parent.phoneEdit.text())
         print email
         print carrier
         print phone
+        alerter(item, email, phone, carrier)
 
     def _text(self):
         pass
