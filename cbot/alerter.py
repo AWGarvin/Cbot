@@ -71,7 +71,7 @@ def alerter(item, recipient, imgurl, phone_num = None, carrier = None):
 		server.quit() 
 
 #test class and test main
-
+'''
 class Item():
     def __init__(self):
         # lines followed by hash will be needed for email
@@ -97,19 +97,7 @@ if __name__ == "__main__":
 	carrier = "Verizon"
 	alerter(item1, recipient, imgurl, phone_num, carrier)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+'''
 
 
 
