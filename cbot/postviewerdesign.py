@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../gui_design/postviewerdesign.ui'
 #
-# Created: Sat Jul 30 17:38:25 2016
+# Created: Sat Jul 30 22:09:41 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -45,6 +45,15 @@ class Ui_Dialog(object):
         self.nextBTN.setObjectName(_fromUtf8("nextBTN"))
         self.horizontalLayout.addWidget(self.nextBTN)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.emailBtn = QtGui.QPushButton(self.verticalLayoutWidget)
+        self.emailBtn.setObjectName(_fromUtf8("emailBtn"))
+        self.horizontalLayout_2.addWidget(self.emailBtn)
+        self.textBtn = QtGui.QPushButton(self.verticalLayoutWidget)
+        self.textBtn.setObjectName(_fromUtf8("textBtn"))
+        self.horizontalLayout_2.addWidget(self.textBtn)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.textBrowser = QtGui.QTextBrowser(self.verticalLayoutWidget)
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
         self.verticalLayout.addWidget(self.textBrowser)
@@ -64,4 +73,6 @@ class Ui_Dialog(object):
         self.prevBTN.setText(_translate("Dialog", "Prev", None))
         self.imgButton.setText(_translate("Dialog", "Images", None))
         self.nextBTN.setText(_translate("Dialog", "Next", None))
+        self.emailBtn.setText(_translate("Dialog", "Email Me!", None))
+        self.textBtn.setText(_translate("Dialog", "Text Me!", None))
 

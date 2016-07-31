@@ -35,6 +35,14 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
         self.categoryCB.insertItem(0, 'free')
         self.categoryCB.insertItems(1, [c for c in sorted(searchIndex)
                                         if c != 'free'])
+
+        # self.carrier = self.carrierBox.getText()
+        # self.email = self.emailEdit.getText()
+        # self.phone = self.phoneEdit.getText()
+        self.carrier = None
+        self.email = None
+        self.phone = None
+
         self.searchBTN.clicked.connect(self.threadsearch)
         self.viewBTN.clicked.connect(self.viewitemslist)
 
@@ -126,6 +134,8 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         self.nextBTN.clicked.connect(self._next)
         self.prevBTN.clicked.connect(self._prev)
         self.imgButton.clicked.connect(self._img)
+        self.emailBtn.clicked.connect(self._email)
+        # self.textBtn.clicked.connect(self._text)
 
     def _next(self):
         self.switchwindow(1)
@@ -135,6 +145,18 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
 
     def _img(self):
         DisplayImage(self.item.pics, 0, self).exec_()
+
+    def _email(self):
+        email = self.parent.emailEdit.text()
+        item = self.item
+        carrier = self.parent.carrierBox.currentText()
+        phone = self.parent.phoneEdit.text()
+        print email
+        print carrier
+        print phone
+
+    def _text(self):
+        pass
         
 
     def switchwindow(self, n):
@@ -144,6 +166,7 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
                 break
         self.close()
         DisplayItem(post, self.parent).exec_()
+
 
 
 class DisplayImage(QtGui.QDialog, itemviewerdesign.Ui_Dialog):

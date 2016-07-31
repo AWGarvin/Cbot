@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>272</width>
-    <height>308</height>
+    <width>353</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,63 @@
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QComboBox" name="carrierBox">
+          <item>
+           <property name="text">
+            <string>Verison</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Sprint</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AT&amp;T</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>T-Mobile</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Virgin Mobile</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Nextel</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Alltel</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="phoneEdit">
+          <property name="text">
+           <string>PHONE #</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="emailEdit">
+          <property name="text">
+           <string>EMAIL</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item>
        <widget class="QPushButton" name="viewBTN">
         <property name="text">
@@ -123,7 +180,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>272</width>
+     <width>353</width>
      <height>27</height>
     </rect>
    </property>

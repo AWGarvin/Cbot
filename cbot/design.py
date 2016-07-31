@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../gui_design/main_window.ui'
 #
-# Created: Wed Jul 27 20:53:23 2016
+# Created: Sat Jul 30 21:25:44 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,13 +26,32 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(272, 308)
+        MainWindow.resize(353, 349)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.verticalLayout_3 = QtGui.QVBoxLayout()
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
+        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.carrierBox = QtGui.QComboBox(self.centralwidget)
+        self.carrierBox.setObjectName(_fromUtf8("carrierBox"))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.carrierBox.addItem(_fromUtf8(""))
+        self.horizontalLayout.addWidget(self.carrierBox)
+        self.phoneEdit = QtGui.QLineEdit(self.centralwidget)
+        self.phoneEdit.setObjectName(_fromUtf8("phoneEdit"))
+        self.horizontalLayout.addWidget(self.phoneEdit)
+        self.emailEdit = QtGui.QLineEdit(self.centralwidget)
+        self.emailEdit.setObjectName(_fromUtf8("emailEdit"))
+        self.horizontalLayout.addWidget(self.emailEdit)
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
         self.viewBTN = QtGui.QPushButton(self.centralwidget)
         self.viewBTN.setObjectName(_fromUtf8("viewBTN"))
         self.verticalLayout_3.addWidget(self.viewBTN)
@@ -77,7 +96,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 272, 27))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 353, 27))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -98,6 +117,15 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.carrierBox.setItemText(0, _translate("MainWindow", "Verison", None))
+        self.carrierBox.setItemText(1, _translate("MainWindow", "Sprint", None))
+        self.carrierBox.setItemText(2, _translate("MainWindow", "AT&T", None))
+        self.carrierBox.setItemText(3, _translate("MainWindow", "T-Mobile", None))
+        self.carrierBox.setItemText(4, _translate("MainWindow", "Virgin Mobile", None))
+        self.carrierBox.setItemText(5, _translate("MainWindow", "Nextel", None))
+        self.carrierBox.setItemText(6, _translate("MainWindow", "Alltel", None))
+        self.phoneEdit.setText(_translate("MainWindow", "PHONE #", None))
+        self.emailEdit.setText(_translate("MainWindow", "EMAIL", None))
         self.viewBTN.setText(_translate("MainWindow", "View All Existing Searches", None))
         self.label_5.setText(_translate("MainWindow", "Date Range:", None))
         self.label_3.setText(_translate("MainWindow", "Region:", None))

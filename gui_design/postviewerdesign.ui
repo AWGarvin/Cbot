@@ -49,6 +49,24 @@
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="emailBtn">
+        <property name="text">
+         <string>Email Me!</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="textBtn">
+        <property name="text">
+         <string>Text Me!</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QTextBrowser" name="textBrowser"/>
     </item>
     <item>

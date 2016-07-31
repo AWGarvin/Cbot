@@ -10,7 +10,8 @@ from email.MIMEImage import MIMEImage
 if __name__ == "__main__":
     sender = "craigslistpythonproject@gmail.com"  #our email
     # reciever = "craigslistpythonproject@gmail.com"#recipients email
-    reciever = "alexwgarvin@gmail.com"
+    # reciever = "alexwgarvin@gmail.com"
+    reciever = "zmauer1@gmail.com"
     cellphone = "7179915983@vtext.com"#need to format according to carrier
     
     #format multipart message
