@@ -111,6 +111,7 @@ class craigItem:
         self.setDescr()
         self.setContact()
         self.setDate()
+        self.setImages()
         #print "complete"
     def getTitle(self):
         return "".join(self.title).encode('utf-8')
@@ -213,6 +214,18 @@ class craigItem:
         +"\ndate:\t" + self.date[0]\
         +"\nupDate:\t" + self.upDate
         return returnthis.encode('utf-8')
+
+    def getImages(self):
+        return self.images
+
+    def setImages(self):
+        try:
+            self.images = self.itemPageTree.xpath(
+                "//div[@id='thumbs']/a/@href")
+        except:
+            self.images = ["Not Available"]
+                                
+
 
 
 if __name__ == "__main__":
