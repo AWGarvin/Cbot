@@ -1,5 +1,6 @@
 from __future__ import print_function
 import smtplib
+import urllib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
@@ -8,7 +9,7 @@ from email.MIMEImage import MIMEImage
 '''User:craigslistpythonproject@gmail.com'''
 '''Pass:Programmingisfun1'''
 
-def alerter(item, recipient, phone_num = None, carrier = None):
+def alerter(item, recipient, imgurl, phone_num = None, carrier = None):
 	sender = "craigslistpythonproject@gmail.com"	
 	if phone_num:
 		phone_num = str(phone_num)
@@ -46,10 +47,12 @@ def alerter(item, recipient, phone_num = None, carrier = None):
 		altmessage.attach(MIMEText(body, 'html'))
 
 		#text message text
-		textbody = "An e-mail has been sent to you regarding your craigslist search of: " + item.title
-		textmessage.attach(MIMEText(textbody, 'plain'))
+		if phone_num:
+			textbody = "An e-mail has been sent to you regarding your craigslist search of: " + item.title
+			textmessage.attach(MIMEText(textbody, 'plain'))
 		
 		#open, save and close image
+		urllib.urlretrieve(imgurl, "test.jpg")
 		img = open('test.jpg', 'rb')
 		messageimage = MIMEImage(img.read())
 		img.close()
@@ -63,11 +66,12 @@ def alerter(item, recipient, phone_num = None, carrier = None):
 		server.starttls()
 		server.login(sender, "Programmingisfun1")
 		server.sendmail(sender, recipient, message.as_string())
-		server.sendmail(sender, cellphone, textmessage.as_string())
+		if phone_num:
+			server.sendmail(sender, cellphone, textmessage.as_string())
 		server.quit() 
 
 #test class and test main
-'''
+
 class Item():
     def __init__(self):
         # lines followed by hash will be needed for email
@@ -86,12 +90,13 @@ class Item():
 
 
 if __name__ == "__main__":
+	imgurl = "https://41.media.tumblr.com/f608ad44a7f1ebfe473912a2d13556a4/tumblr_np8f3uJWSb1t5auluo1_1280.jpg"
 	item1 = Item()
 	recipient = "craigslistpythonproject@gmail.com"
 	phone_num = "7179915983"
 	carrier = "Verizon"
-	alerter(item1, recipient, phone_num, carrier)
-'''
+	alerter(item1, recipient, imgurl, phone_num, carrier)
+
 
 
 
