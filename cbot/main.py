@@ -62,7 +62,6 @@ class Cbot(QtGui.QMainWindow, design.Ui_MainWindow):
             item.date = c.getDate()
             item.title = c.getTitle()
             item.pics = c.getImages()
-            # print item.pics
             self.items.append(item)
 
     def viewitemslist(self):
@@ -165,7 +164,6 @@ class DisplayImage(QtGui.QDialog, itemviewerdesign.Ui_Dialog):
         self.pushButton.clicked.connect(self._next)
         self.pushButton_2.clicked.connect(self._prev)
 
-
     def _next(self):
         self.switchwindow(1)
         
@@ -178,7 +176,7 @@ class DisplayImage(QtGui.QDialog, itemviewerdesign.Ui_Dialog):
         self.close()
         nextImg.exec_()
 
-        
+
 
 def main():
     app = QtGui.QApplication(sys.argv)
