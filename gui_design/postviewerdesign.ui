@@ -53,14 +53,7 @@
       <item>
        <widget class="QPushButton" name="emailBtn">
         <property name="text">
-         <string>Email Me!</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="textBtn">
-        <property name="text">
-         <string>Text Me!</string>
+         <string>Contact Me!</string>
         </property>
        </widget>
       </item>

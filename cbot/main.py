@@ -136,7 +136,6 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         self.prevBTN.clicked.connect(self._prev)
         self.imgButton.clicked.connect(self._img)
         self.emailBtn.clicked.connect(self._email)
-        # self.textBtn.clicked.connect(self._text)
 
     def _next(self):
         self.switchwindow(1)
@@ -145,21 +144,22 @@ class DisplayItem(QtGui.QDialog, postviewerdesign.Ui_Dialog):
         self.switchwindow(-1)
 
     def _img(self):
-        DisplayImage(self.item.pics, 0, self).exec_()
+        try:
+            DisplayImage(self.item.pics, 0, self).exec_()
+        except IndexError: pass # will create alert message box
+        # saying that no images are available
 
     def _email(self):
         email = str(self.parent.emailEdit.text())
         item = self.item
         carrier = str(self.parent.carrierBox.currentText())
         phone = str(self.parent.phoneEdit.text())
-        print email
-        print carrier
-        print phone
-        alerter(item, email, phone, carrier)
+        # print email
+        # print carrier
+        # print phone
+        # alerter(item, email, phone, carrier)
+        Thread(target=alerter, args=(item, email, phone, carrier)).start()
 
-    def _text(self):
-        pass
-        
 
     def switchwindow(self, n):
         for i in range(0,len(self.parent.items)):
