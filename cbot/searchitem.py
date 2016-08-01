@@ -57,7 +57,10 @@ class craigList:
             for searchitem in pageLink:
                 correctUrl = self.sCit + craigUrl + searchitem
                 if craigUrl in searchitem: break
-                testDate = self.dateTables[x][y]
+                try:
+                    testDate = self.dateTables[x][y]
+                except:
+                    break
                 testD = testDate[:10]
                 Y = int(testD[:4])
                 M = int(testD[5:7])
@@ -84,9 +87,9 @@ class craigList:
         # print type(cItem.getTitle())
         # print type(cItem.getPrice())
         # print type(cItem.getDescr())
+        # print type(cItem.getDate())
         # print type(cItem.getEmail())
         # print type(cItem.getPhone())
-        # print type(cItem.getDate())
         # print type(cItem.getUpDate())        
         # print "***********************************************"
         return
@@ -98,14 +101,22 @@ class craigItem:
         self.minD = int(minDate[8:])
         self.upDate = upDte
         self.cityurl = city
-        iUrl = str(cPag)
+        self.iUrl = str(cPag)
         #print iUrl
         try:
-            itemPage = requests.get(iUrl)
+            itemPage = requests.get(self.iUrl)
         except:
             self.title = ["none"]
             return
         self.itemPageTree = html.fromstring(itemPage.text)
+        self.title = ["Not Available"]
+        self.price = ["Not Available"]
+        self.descr = ["Not Available"]
+        self.email = ["Not Available"]
+        self.phone = ["Not Available"]
+        self.date = ["Not Available"]
+        self.upDate = ["Not Available"]
+        self.images = ["Not Available"]
         self.setTitle()
         self.setPrice()
         self.setDescr()
@@ -113,6 +124,8 @@ class craigItem:
         self.setDate()
         self.setImages()
         #print "complete"
+    def getUrl(self):
+        return self.iUrl
     def getTitle(self):
         return "".join(self.title).encode('utf-8')
     def getPrice(self):
